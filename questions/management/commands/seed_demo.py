@@ -107,6 +107,17 @@ class Command(BaseCommand):
             "Maybe the question is a symptom, not the root.",
         ]
 
+        reply_snippets = [
+            "I see the point, but the distinction might be doing too much work.",
+            "This pushes me to clarify what I mean by identity here.",
+            "Interesting — how would this change in a collective setting?",
+            "Could be, though it risks turning the question into a tautology.",
+            "I like this framing; it makes the trade-offs more explicit.",
+            "Yes, and it also depends on what counts as a reason in the first place.",
+            "I think this is right, but only if we allow for uncertainty.",
+            "This feels like a good place to bring in examples.",
+        ]
+
         created_questions = 0
         for title in questions:
             author = random.choice(users)
@@ -114,12 +125,26 @@ class Command(BaseCommand):
             question = Question.objects.create(title=title, body=body, author=author)
             created_questions += 1
 
+            comment_pool = []
             for _ in range(random.randint(2, 5)):
                 comment_author = random.choice(users)
-                Comment.objects.create(
+                comment = Comment.objects.create(
                     question=question,
                     author=comment_author,
                     body=random.choice(comment_snippets),
+                    created_at=timezone.now(),
+                )
+                comment_pool.append(comment)
+
+            reply_count = random.randint(1, 4)
+            for _ in range(reply_count):
+                parent = random.choice(comment_pool)
+                reply_author = random.choice(users)
+                Comment.objects.create(
+                    question=question,
+                    parent=parent,
+                    author=reply_author,
+                    body=random.choice(reply_snippets),
                     created_at=timezone.now(),
                 )
 
