@@ -10,8 +10,7 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
-from whitenoise.asgi import WhiteNoise
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'philonet.settings')
 
-application = WhiteNoise(get_asgi_application())
+application = get_asgi_application()
