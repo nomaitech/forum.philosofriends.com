@@ -33,6 +33,10 @@ if env_allowed_hosts:
 else:
     ALLOWED_HOSTS = default_allowed_hosts
 
+env_csrf_trusted = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if env_csrf_trusted:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in env_csrf_trusted.split(',') if origin.strip()]
+
 
 # Application definition
 
