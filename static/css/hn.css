@@ -33,7 +33,7 @@ a:hover {
 
 .hn-bar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     max-width: 980px;
     margin: 0 auto;
@@ -42,7 +42,7 @@ a:hover {
 
 .hn-left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 }
 
