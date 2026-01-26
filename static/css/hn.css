@@ -46,6 +46,16 @@ a:hover {
     gap: 10px;
 }
 
+.hn-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.hn-subnav {
+    font-size: 12px;
+}
+
 .hn-logo {
     width: 18px;
     height: 18px;
