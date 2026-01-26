@@ -11,7 +11,7 @@ env:
   - name: ALLOWED_HOSTS
     value: philo-news.nomaitech.com
   - name: CSRF_TRUSTED_ORIGINS
-    value: https://philo-news.nomaitech.com
+    value: https://philo-news.nomaitech.com,http://philo-news.nomaitech.com
 
 persistence:
   enabled: true
