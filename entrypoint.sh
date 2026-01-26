@@ -8,6 +8,7 @@ if [ -n "${DATABASE_PATH:-}" ]; then
     fi
 fi
 
+python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 
 exec "$@"
