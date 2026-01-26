@@ -149,6 +149,15 @@ a:hover {
     margin-bottom: 10px;
 }
 
+.hn-comment-form {
+    margin-top: 14px;
+}
+
+.hn-error {
+    color: #b42318;
+    font-size: 11px;
+}
+
 .hn-comment-list {
     list-style: none;
     padding-left: 0;

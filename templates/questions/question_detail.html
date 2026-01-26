@@ -26,5 +26,22 @@
         {% else %}
             <p class="hn-body hn-muted">No comments yet.</p>
         {% endif %}
+
+        {% if user.is_authenticated %}
+            <form class="hn-form hn-comment-form" method="post">
+                {% csrf_token %}
+                <div class="hn-field">
+                    {{ comment_form.body }}
+                    {% if comment_form.body.errors %}
+                        <div class="hn-error">{{ comment_form.body.errors }}</div>
+                    {% endif %}
+                </div>
+                <button class="hn-button" type="submit">Post comment</button>
+            </form>
+        {% else %}
+            <p class="hn-body hn-muted">
+                <a href="/accounts/login/?next=/questions/{{ question.pk }}/">Log in</a> to post a comment.
+            </p>
+        {% endif %}
     </section>
 {% endblock %}

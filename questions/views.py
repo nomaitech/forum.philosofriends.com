@@ -2,8 +2,8 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import QuestionForm, SignupForm
-from .models import Question
+from .forms import CommentForm, QuestionForm, SignupForm
+from .models import Comment, Question
 
 
 def question_list(request):
@@ -16,6 +16,20 @@ def question_detail(request, pk):
         Question.objects.select_related('author').prefetch_related('comments__author'),
         pk=pk,
     )
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect(f'/accounts/login/?next=/questions/{pk}/')
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            Comment.objects.create(
+                question=question,
+                author=request.user,
+                body=form.cleaned_data['body'],
+            )
+            return redirect('question_detail', pk=pk)
+    else:
+        form = CommentForm()
+
     comments = list(question.comments.select_related('author').order_by('created_at'))
     comment_map = {}
     for comment in comments:
@@ -32,7 +46,7 @@ def question_detail(request, pk):
     return render(
         request,
         'questions/question_detail.html',
-        {'question': question, 'comments': comment_tree},
+        {'question': question, 'comments': comment_tree, 'comment_form': form},
     )
 
 
