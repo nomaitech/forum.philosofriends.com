@@ -8,6 +8,8 @@ containerPort: 8000
 env:
   - name: DATABASE_PATH
     value: /data/db.sqlite3
+  - name: ALLOWED_HOSTS
+    value: philo-news.nomaitech.com
 
 persistence:
   enabled: true
