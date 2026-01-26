@@ -11,16 +11,13 @@
         <div class="hn-bar">
             <div class="hn-left">
                 <a class="hn-logo" href="/">Φ</a>
-                <div class="hn-brand">
-                    <div class="hn-title">
-                        <a href="/">Philosofriends</a>
-                    </div>
-                    <div class="hn-subnav">
-                        <a class="hn-submit" href="/submit/">submit</a>
-                    </div>
+                <div class="hn-title">
+                    <a href="/">Philosofriends</a>
                 </div>
             </div>
             <nav class="hn-nav">
+                <a class="hn-submit" href="/submit/">submit</a>
+                <span class="hn-sep">|</span>
                 {% if user.is_authenticated %}
                     <span class="hn-user">{{ user.username }}</span>
                     <span class="hn-sep">|</span>
