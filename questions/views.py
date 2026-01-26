@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from .forms import CommentForm, QuestionForm, SignupForm
 from .models import Comment, Question
@@ -16,9 +17,14 @@ def question_detail(request, pk):
         Question.objects.select_related('author').prefetch_related('comments__author'),
         pk=pk,
     )
+    if question.slug:
+        canonical_url = reverse('question_detail_slug', args=[question.slug])
+        if request.path != canonical_url:
+            return redirect(canonical_url, permanent=True)
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect(f'/accounts/login/?next=/questions/{pk}/')
+            login_next = reverse('question_detail_slug', args=[question.slug])
+            return redirect(f'/accounts/login/?next={login_next}')
         form = CommentForm(request.POST)
         if form.is_valid():
             Comment.objects.create(
@@ -26,7 +32,7 @@ def question_detail(request, pk):
                 author=request.user,
                 body=form.cleaned_data['body'],
             )
-            return redirect('question_detail', pk=pk)
+            return redirect('question_detail_slug', slug=question.slug)
     else:
         form = CommentForm()
 
@@ -50,6 +56,14 @@ def question_detail(request, pk):
     )
 
 
+def question_detail_slug(request, slug):
+    question = get_object_or_404(
+        Question.objects.select_related('author').prefetch_related('comments__author'),
+        slug=slug,
+    )
+    return question_detail(request, question.pk)
+
+
 @login_required
 def question_create(request):
     if request.method == 'POST':
@@ -58,7 +72,7 @@ def question_create(request):
             question = form.save(commit=False)
             question.author = request.user
             question.save()
-            return redirect('question_detail', pk=question.pk)
+            return redirect('question_detail_slug', slug=question.slug)
     else:
         form = QuestionForm()
     return render(request, 'questions/question_form.html', {'form': form})

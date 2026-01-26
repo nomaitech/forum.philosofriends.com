@@ -7,10 +7,10 @@
         {% for question in questions %}
             <li class="hn-item">
                 <div class="hn-item-title">
-                    <a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a>
+                    <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
                 </div>
                 <div class="hn-item-meta">
-                    asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail' question.pk %}">{{ question.comments.count }} comments</a>
+                    asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
                 </div>
             </li>
         {% empty %}
