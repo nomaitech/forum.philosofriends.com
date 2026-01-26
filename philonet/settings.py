@@ -23,8 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-hin0mr+7o1^5+d7ay+hk4&e8_gpm+s@@=g+i@6ceig1q_hc8*2'
 
+def _env_flag(value, default=False):
+    if value is None:
+        return default
+    return value.strip().lower() in {'1', 'true', 'yes', 'on'}
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_flag(os.environ.get('DEBUG'), default=True)
 
 default_allowed_hosts = ['witham.nomai.internal', '127.0.0.1', 'localhost', '100.64.0.5']
 env_allowed_hosts = os.environ.get('ALLOWED_HOSTS')

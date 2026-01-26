@@ -8,10 +8,21 @@ containerPort: 8000
 env:
   - name: DATABASE_PATH
     value: /data/db.sqlite3
+  - name: DEBUG
+    value: "false"
   - name: ALLOWED_HOSTS
     value: forum.philosofriends.com
   - name: CSRF_TRUSTED_ORIGINS
     value: https://forum.philosofriends.com,http://forum.philosofriends.com
+
+command:
+  - uvicorn
+args:
+  - philonet.asgi:application
+  - --host
+  - 0.0.0.0
+  - --port
+  - "8000"
 
 persistence:
   enabled: true
