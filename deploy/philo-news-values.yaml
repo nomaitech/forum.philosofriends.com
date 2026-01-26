@@ -9,9 +9,9 @@ env:
   - name: DATABASE_PATH
     value: /data/db.sqlite3
   - name: ALLOWED_HOSTS
-    value: philo-news.nomaitech.com
+    value: forum.philosofriends.com
   - name: CSRF_TRUSTED_ORIGINS
-    value: https://philo-news.nomaitech.com,http://philo-news.nomaitech.com
+    value: https://forum.philosofriends.com,http://forum.philosofriends.com
 
 persistence:
   enabled: true
