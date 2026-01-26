@@ -47,9 +47,5 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{- if .Values.persistence.existingClaim -}}
-              {{ .Values.persistence.existingClaim }}
-            {{- else -}}
-              {{ include "web-app.fullname" . }}-data
-            {{- end }}
+            claimName: {{- if .Values.persistence.existingClaim -}}{{ .Values.persistence.existingClaim }}{{- else -}}{{ include "web-app.fullname" . }}-data{{- end }}
       {{- end }}
