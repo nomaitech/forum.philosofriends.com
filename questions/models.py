@@ -25,6 +25,20 @@ class Question(models.Model):
         return self.title
 
 
+class Vote(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='votes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_votes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['question', 'user'], name='unique_question_vote'),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} upvoted {self.question.title}'
+
+
 class Comment(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='comments')
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='replies', null=True, blank=True)

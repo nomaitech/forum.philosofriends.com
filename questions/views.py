@@ -3,25 +3,40 @@ import logging
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Count, Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import CommentForm, QuestionForm, SignupForm
-from .models import Comment, Question
+from .models import Comment, Question, Vote
 
 logger = logging.getLogger(__name__)
 
 
 def question_list(request):
-    questions = Question.objects.select_related('author').prefetch_related('comments').order_by('-created_at')
+    questions = (
+        Question.objects.select_related('author')
+        .prefetch_related('comments')
+        .annotate(score=Count('votes'))
+        .order_by('-score', '-created_at')
+    )
+    if request.user.is_authenticated:
+        questions = questions.annotate(
+            has_voted=Exists(Vote.objects.filter(question=OuterRef('pk'), user=request.user))
+        )
     return render(request, 'questions/question_list.html', {'questions': questions})
 
 
 def question_detail(request, pk):
     question = get_object_or_404(
-        Question.objects.select_related('author').prefetch_related('comments__author'),
+        Question.objects.select_related('author')
+        .prefetch_related('comments__author')
+        .annotate(score=Count('votes')),
         pk=pk,
     )
+    user_has_voted = False
+    if request.user.is_authenticated:
+        user_has_voted = Vote.objects.filter(question=question, user=request.user).exists()
     if question.slug:
         canonical_url = reverse('question_detail_slug', args=[question.slug])
         if request.path != canonical_url:
@@ -71,6 +86,7 @@ def question_detail(request, pk):
             'comment_form': form,
             'reply_parent_id': reply_parent.id if reply_parent else None,
             'reply_parent_author': reply_parent.author.username if reply_parent else None,
+            'user_has_voted': user_has_voted,
         },
     )
 
@@ -81,6 +97,16 @@ def question_detail_slug(request, slug):
         slug=slug,
     )
     return question_detail(request, question.pk)
+
+
+@login_required
+def question_upvote(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    if request.method != 'POST':
+        return redirect('question_detail_slug', slug=question.slug)
+    Vote.objects.get_or_create(question=question, user=request.user)
+    next_url = request.POST.get('next') or reverse('question_detail_slug', args=[question.slug])
+    return redirect(next_url)
 
 
 @login_required

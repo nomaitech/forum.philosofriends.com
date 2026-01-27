@@ -23,6 +23,20 @@
         <div class="hn-item-meta">
             asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }}
         </div>
+        <div class="hn-vote-detail">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'question_upvote' question.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <button class="hn-vote-button {% if user_has_voted %}hn-vote-active{% endif %}" type="submit" aria-label="Upvote">
+                        ▲
+                    </button>
+                </form>
+            {% else %}
+                <div class="hn-vote-placeholder">▲</div>
+            {% endif %}
+            <div class="hn-vote-count">{{ question.score|default:0 }} point{{ question.score|pluralize }}</div>
+        </div>
         {% if question.link %}
             <p class="hn-body">
                 <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">{{ question.link }}</a>
