@@ -19,7 +19,6 @@
                         {% else %}
                             <div class="hn-vote-placeholder">▲</div>
                         {% endif %}
-                        <div class="hn-vote-count">{{ question.score|default:0 }}</div>
                     </div>
                     <div class="hn-item-title">
                         {% if question.link %}
@@ -39,7 +38,7 @@
                     </div>
                 </div>
                 <div class="hn-item-meta">
-                    asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
+                    {{ question.score|default:0 }} point{{ question.score|pluralize }} · asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
                     {% if question.link %}
                         · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
                     {% endif %}

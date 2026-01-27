@@ -20,9 +20,6 @@
 {% block content %}
     <article class="hn-article">
         <h1>{{ question.title }}</h1>
-        <div class="hn-item-meta">
-            asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }}
-        </div>
         <div class="hn-vote-detail">
             {% if user.is_authenticated %}
                 <form method="post" action="{% url 'question_upvote' question.pk %}">
@@ -36,6 +33,9 @@
                 <div class="hn-vote-placeholder">▲</div>
             {% endif %}
             <div class="hn-vote-count">{{ question.score|default:0 }} point{{ question.score|pluralize }}</div>
+        </div>
+        <div class="hn-item-meta">
+            asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }}
         </div>
         {% if question.link %}
             <p class="hn-body">
