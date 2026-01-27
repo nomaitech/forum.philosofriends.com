@@ -43,8 +43,13 @@
         {% endif %}
 
         {% if user.is_authenticated %}
-            <form class="hn-form hn-comment-form" method="post">
+            <form class="hn-form hn-comment-form" id="comment-form" method="post">
                 {% csrf_token %}
+                <input type="hidden" name="parent_id" id="comment-parent-id" value="{{ reply_parent_id|default:'' }}">
+                <div class="hn-replying" id="replying-to"{% if not reply_parent_id %} hidden{% endif %}>
+                    Replying to <span id="replying-to-name">{{ reply_parent_author|default:'' }}</span>
+                    <button class="hn-reply-cancel" type="button" id="reply-cancel">Cancel</button>
+                </div>
                 <div class="hn-field">
                     {{ comment_form.body }}
                     {% if comment_form.body.errors %}
@@ -59,4 +64,40 @@
             </p>
         {% endif %}
     </section>
+
+    {% if user.is_authenticated %}
+        <script>
+            (() => {
+                const replyButtons = document.querySelectorAll('.hn-reply-button');
+                const parentInput = document.getElementById('comment-parent-id');
+                const replyingTo = document.getElementById('replying-to');
+                const replyingName = document.getElementById('replying-to-name');
+                const replyCancel = document.getElementById('reply-cancel');
+                const commentBody = document.getElementById('id_body');
+                const commentForm = document.getElementById('comment-form');
+
+                const clearReply = () => {
+                    if (parentInput) parentInput.value = '';
+                    if (replyingName) replyingName.textContent = '';
+                    if (replyingTo) replyingTo.hidden = true;
+                };
+
+                replyButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const commentId = button.getAttribute('data-comment-id');
+                        const author = button.getAttribute('data-comment-author');
+                        if (parentInput) parentInput.value = commentId;
+                        if (replyingName) replyingName.textContent = author || 'this comment';
+                        if (replyingTo) replyingTo.hidden = false;
+                        if (commentBody) commentBody.focus();
+                        if (commentForm) commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                });
+
+                if (replyCancel) {
+                    replyCancel.addEventListener('click', clearReply);
+                }
+            })();
+        </script>
+    {% endif %}
 {% endblock %}

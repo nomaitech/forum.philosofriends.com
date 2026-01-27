@@ -187,6 +187,35 @@ a:hover {
     line-height: 1.4;
 }
 
+.hn-comment-actions {
+    margin-top: 6px;
+}
+
+.hn-reply-button,
+.hn-reply-cancel {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 11px;
+    color: var(--hn-muted);
+    cursor: pointer;
+}
+
+.hn-reply-button:hover,
+.hn-reply-cancel:hover {
+    color: var(--hn-orange);
+    text-decoration: underline;
+}
+
+.hn-replying {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--hn-muted);
+    margin-bottom: 8px;
+}
+
 .hn-muted {
     color: var(--hn-muted);
 }

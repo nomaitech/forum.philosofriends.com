@@ -26,16 +26,24 @@ def question_detail(request, pk):
         canonical_url = reverse('question_detail_slug', args=[question.slug])
         if request.path != canonical_url:
             return redirect(canonical_url, permanent=True)
+    reply_parent = None
     if request.method == 'POST':
         if not request.user.is_authenticated:
             login_next = reverse('question_detail_slug', args=[question.slug])
             return redirect(f'/accounts/login/?next={login_next}')
         form = CommentForm(request.POST)
+        parent_id = request.POST.get('parent_id') or None
+        if parent_id:
+            try:
+                reply_parent = question.comments.get(pk=parent_id)
+            except Comment.DoesNotExist:
+                reply_parent = None
         if form.is_valid():
             Comment.objects.create(
                 question=question,
                 author=request.user,
                 body=form.cleaned_data['body'],
+                parent=reply_parent,
             )
             return redirect('question_detail_slug', slug=question.slug)
     else:
@@ -57,7 +65,13 @@ def question_detail(request, pk):
     return render(
         request,
         'questions/question_detail.html',
-        {'question': question, 'comments': comment_tree, 'comment_form': form},
+        {
+            'question': question,
+            'comments': comment_tree,
+            'comment_form': form,
+            'reply_parent_id': reply_parent.id if reply_parent else None,
+            'reply_parent_author': reply_parent.author.username if reply_parent else None,
+        },
     )
 
 
