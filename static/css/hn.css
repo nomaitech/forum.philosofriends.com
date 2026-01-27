@@ -270,9 +270,10 @@ a:hover {
 }
 
 .hn-link-icon {
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     margin-left: 4px;
+    vertical-align: middle;
+    line-height: 1;
 }
 
 .hn-link-icon svg {
@@ -281,6 +282,7 @@ a:hover {
     stroke: currentColor;
     stroke-width: 1.4;
     fill: none;
+    display: block;
 }
 
 .hn-footer {
