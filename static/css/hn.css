@@ -277,6 +277,10 @@ a:hover {
     font-size: 12px;
 }
 
+.hn-field[hidden] {
+    display: none;
+}
+
 .hn-toggle {
     display: flex;
     gap: 14px;
