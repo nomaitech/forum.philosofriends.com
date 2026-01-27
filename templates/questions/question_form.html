@@ -4,7 +4,7 @@
 
 {% block content %}
     <section class="hn-form">
-        <h1>Submit a question</h1>
+        <h1>Submit a post</h1>
         <form method="post">
             {% csrf_token %}
             <div class="hn-field hn-submit-type">
@@ -21,21 +21,21 @@
                 </div>
             </div>
             <div class="hn-field" id="title-field">
-                <label for="id_title">Question</label>
+                <label for="id_title">Question / Title</label>
                 {{ form.title }}
                 {% if form.title.errors %}
                     <div class="hn-error">{{ form.title.errors }}</div>
                 {% endif %}
             </div>
             <div class="hn-field hn-link-field" id="link-field">
-                <label for="id_link">Link</label>
+                <label for="id_link">Link URL</label>
                 {{ form.link }}
                 {% if form.link.errors %}
                     <div class="hn-error">{{ form.link.errors }}</div>
                 {% endif %}
             </div>
             <div class="hn-field" id="body-field">
-                <label for="id_body">Context</label>
+                <label for="id_body">Context (optional)</label>
                 {{ form.body }}
                 {% if form.body.errors %}
                     <div class="hn-error">{{ form.body.errors }}</div>
