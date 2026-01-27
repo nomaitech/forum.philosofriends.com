@@ -10,30 +10,25 @@
 <body>
     <header class="hn-header">
         <div class="hn-bar">
-            <div class="hn-top">
-                <a class="hn-logo" href="/">Φ</a>
-                <div class="hn-brand">
-                    <div class="hn-title">
-                        <a href="/">Philosofriends</a>
-                    </div>
-                </div>
+            <a class="hn-logo" href="/">Φ</a>
+            <div class="hn-title">
+                <a href="/">Philosofriends</a>
             </div>
-            <div class="hn-actions">
-                <div class="hn-actions-left">
-                    <a class="hn-submit" href="/submit/">submit</a>
-                </div>
-                <nav class="hn-nav">
-                    {% if user.is_authenticated %}
-                        <span class="hn-user">{{ user.username }}</span>
-                        <span class="hn-sep">|</span>
-                        <a href="/accounts/logout/">logout</a>
-                    {% else %}
-                        <a href="/accounts/login/">login</a>
-                        <span class="hn-sep">|</span>
-                        <a href="/signup/">signup</a>
-                    {% endif %}
-                </nav>
-            </div>
+            <nav class="hn-nav hn-nav-left">
+                <a class="hn-submit" href="/submit/">submit</a>
+            </nav>
+            <div class="hn-spacer"></div>
+            <nav class="hn-nav hn-nav-right">
+                {% if user.is_authenticated %}
+                    <span class="hn-user">{{ user.username }}</span>
+                    <span class="hn-sep">|</span>
+                    <a href="/accounts/logout/">logout</a>
+                {% else %}
+                    <a href="/accounts/login/">login</a>
+                    <span class="hn-sep">|</span>
+                    <a href="/signup/">signup</a>
+                {% endif %}
+            </nav>
         </div>
     </header>
 

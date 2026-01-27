@@ -33,22 +33,12 @@ a:hover {
 
 .hn-bar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
     max-width: 980px;
     margin: 0 auto;
-    gap: 6px;
-}
-
-.hn-top {
-    display: flex;
-    align-items: center;
     gap: 10px;
-}
-
-.hn-brand {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
 }
 
 .hn-logo {
@@ -70,18 +60,9 @@ a:hover {
     font-size: 12px;
 }
 
-.hn-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 12px;
-}
-
-.hn-actions-left {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.hn-spacer {
+    flex: 1;
+    min-width: 10px;
 }
 
 .hn-nav {
@@ -295,7 +276,7 @@ a:hover {
 }
 
 @media (max-width: 640px) {
-    .hn-actions {
-        flex-wrap: wrap;
+    .hn-bar {
+        row-gap: 6px;
     }
 }
