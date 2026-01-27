@@ -12,8 +12,9 @@
                             {{ question.title }}
                             <span class="hn-link-icon" aria-hidden="true">
                                 <svg viewBox="0 0 16 16" focusable="false">
-                                    <path d="M6 3h7v7M13 3L6 10" />
-                                    <path d="M13 9v4H3V3h4" />
+                                    <path d="M10.5 2.5h3v3" />
+                                    <path d="M9.2 6.8L13.5 2.5" />
+                                    <path d="M7.5 3.5H3.5v9h9v-4" />
                                 </svg>
                             </span>
                         </a>
@@ -24,15 +25,7 @@
                 <div class="hn-item-meta">
                     asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
                     {% if question.link %}
-                        · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">
-                            source
-                            <span class="hn-link-icon" aria-hidden="true">
-                                <svg viewBox="0 0 16 16" focusable="false">
-                                    <path d="M6 3h7v7M13 3L6 10" />
-                                    <path d="M13 9v4H3V3h4" />
-                                </svg>
-                            </span>
-                        </a>
+                        · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
                     {% endif %}
                 </div>
             </li>
