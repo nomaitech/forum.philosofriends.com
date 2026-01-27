@@ -7,15 +7,59 @@
         <h1>Submit a question</h1>
         <form method="post">
             {% csrf_token %}
-            <div class="hn-field">
-                <label for="id_title">Question</label>
-                {{ form.title }}
+            <div class="hn-field hn-submit-type">
+                <label>Post type</label>
+                <div class="hn-toggle">
+                    <label>
+                        <input type="radio" name="post_type" value="question" {% if not form.link.value %}checked{% endif %}>
+                        Question
+                    </label>
+                    <label>
+                        <input type="radio" name="post_type" value="link" {% if form.link.value %}checked{% endif %}>
+                        Link
+                    </label>
+                </div>
             </div>
             <div class="hn-field">
+                <label for="id_title">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="hn-error">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="hn-field hn-link-field" id="link-field">
+                <label for="id_link">Link</label>
+                {{ form.link }}
+                {% if form.link.errors %}
+                    <div class="hn-error">{{ form.link.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="hn-field" id="body-field">
                 <label for="id_body">Context</label>
                 {{ form.body }}
+                {% if form.body.errors %}
+                    <div class="hn-error">{{ form.body.errors }}</div>
+                {% endif %}
             </div>
             <button class="hn-button" type="submit">Submit</button>
         </form>
     </section>
+
+    <script>
+        (() => {
+            const linkField = document.getElementById('link-field');
+            const bodyField = document.getElementById('body-field');
+            const typeInputs = document.querySelectorAll('input[name="post_type"]');
+
+            const syncFields = () => {
+                const selected = document.querySelector('input[name="post_type"]:checked');
+                const isLink = selected && selected.value === 'link';
+                if (linkField) linkField.hidden = !isLink;
+                if (bodyField) bodyField.hidden = isLink;
+            };
+
+            typeInputs.forEach((input) => input.addEventListener('change', syncFields));
+            syncFields();
+        })();
+    </script>
 {% endblock %}

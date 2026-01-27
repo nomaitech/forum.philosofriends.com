@@ -237,6 +237,20 @@ a:hover {
     font-size: 12px;
 }
 
+.hn-toggle {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-size: 12px;
+}
+
+.hn-toggle label {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    cursor: pointer;
+}
+
 .hn-field input,
 .hn-field textarea {
     border: 1px solid var(--hn-border);

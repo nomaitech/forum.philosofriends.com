@@ -6,6 +6,7 @@ class Question(models.Model):
     title = models.CharField(max_length=180)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     body = models.TextField(blank=True)
+    link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions')
 

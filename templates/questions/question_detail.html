@@ -23,6 +23,11 @@
         <div class="hn-item-meta">
             asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }}
         </div>
+        {% if question.link %}
+            <p class="hn-body">
+                <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">{{ question.link }}</a>
+            </p>
+        {% endif %}
         {% if question.body %}
             <p class="hn-body">{{ question.body|linebreaksbr }}</p>
         {% else %}

@@ -7,10 +7,17 @@
         {% for question in questions %}
             <li class="hn-item">
                 <div class="hn-item-title">
-                    <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
+                    {% if question.link %}
+                        <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">{{ question.title }}</a>
+                    {% else %}
+                        <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
+                    {% endif %}
                 </div>
                 <div class="hn-item-meta">
                     asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
+                    {% if question.link %}
+                        · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
+                    {% endif %}
                 </div>
             </li>
         {% empty %}

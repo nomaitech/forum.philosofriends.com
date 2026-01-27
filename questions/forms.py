@@ -8,11 +8,20 @@ from .models import Comment, Question
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['title', 'body']
+        fields = ['title', 'link', 'body']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Ask a philosophical question'}),
+            'link': forms.URLInput(attrs={'placeholder': 'https://example.com'}),
             'body': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Add context if you want (optional)'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        link = (cleaned_data.get('link') or '').strip()
+        body = (cleaned_data.get('body') or '').strip()
+        if not link and not body:
+            self.add_error('body', 'Add context or include a link.')
+        return cleaned_data
 
 
 class SignupForm(UserCreationForm):
