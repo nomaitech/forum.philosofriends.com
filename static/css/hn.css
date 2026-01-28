@@ -95,7 +95,13 @@ a:hover {
 .hn-item-header {
     display: flex;
     align-items: flex-start;
-    gap: 0;
+    gap: 6px;
+}
+
+.hn-item-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .hn-item-title {
@@ -135,7 +141,7 @@ a:hover {
     width: 16px;
     height: 16px;
     line-height: 18px;
-    font-size: 0;
+    font-size: 16px;
     cursor: pointer;
     padding: 0;
 }
@@ -153,7 +159,7 @@ a:hover {
     height: 16px;
     display: grid;
     place-items: center;
-    font-size: 0;
+    font-size: 16px;
     color: #8a9aab;
     opacity: 0.6;
 }
@@ -313,7 +319,7 @@ a:hover {
 }
 
 .hn-link-icon {
-    display: none;
+    display: inline-block;
     margin-left: 4px;
     vertical-align: middle;
     line-height: 1;

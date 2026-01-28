@@ -7,28 +7,43 @@
         {% for question in questions %}
             <li class="hn-item">
                 <div class="hn-item-header">
-                    <div class="hn-item-title">
-                        {% if question.link %}
-                            <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">
-                                {{ question.title }}
-                                <span class="hn-link-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 16 16" focusable="false">
-                                        <path d="M10.5 2.5h3v3" />
-                                        <path d="M9.2 6.8L13.5 2.5" />
-                                        <path d="M7.5 3.5H3.5v9h9v-4" />
-                                    </svg>
-                                </span>
-                            </a>
+                    <div class="hn-vote">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'question_upvote' question.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <button class="hn-vote-button {% if question.has_voted %}hn-vote-active{% endif %}" type="submit" aria-label="Upvote">
+                                    ▲
+                                </button>
+                            </form>
                         {% else %}
-                            <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
+                            <div class="hn-vote-placeholder">▲</div>
                         {% endif %}
                     </div>
-                </div>
-                <div class="hn-item-meta">
-                    {{ question.score|default:0 }} point{{ question.score|pluralize }} · asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
-                    {% if question.link %}
-                        · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
-                    {% endif %}
+                    <div class="hn-item-content">
+                        <div class="hn-item-title">
+                            {% if question.link %}
+                                <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">
+                                    {{ question.title }}
+                                    <span class="hn-link-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 16 16" focusable="false">
+                                            <path d="M10.5 2.5h3v3" />
+                                            <path d="M9.2 6.8L13.5 2.5" />
+                                            <path d="M7.5 3.5H3.5v9h9v-4" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
+                            {% endif %}
+                        </div>
+                        <div class="hn-item-meta">
+                            {{ question.score|default:0 }} point{{ question.score|pluralize }} · asked by {{ question.author.username }} · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
+                            {% if question.link %}
+                                · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </li>
         {% empty %}
