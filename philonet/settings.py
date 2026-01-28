@@ -211,6 +211,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
+            'level': 'INFO',
         },
     },
     'loggers': {
@@ -222,6 +223,11 @@ LOGGING = {
         'questions': {
             'handlers': ['console'],
             'level': 'ERROR',
+            'propagate': False,
+        },
+        'philonet': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
