@@ -26,8 +26,6 @@
                     {% if user.is_authenticated %}
                         <span class="hn-user">{{ user.username }}</span>
                         <span class="hn-sep">|</span>
-                        <a href="/account/delete/">delete account</a>
-                        <span class="hn-sep">|</span>
                         <a href="/accounts/logout/">logout</a>
                     {% else %}
                         <a href="/accounts/login/">login</a>
@@ -52,6 +50,9 @@
 
     <footer class="hn-footer">
         <div>Philosofriends is a place for short, sincere questions about meaning, mind, and ethics.</div>
+        {% if user.is_authenticated %}
+            <div><a href="/account/delete/">delete account</a></div>
+        {% endif %}
     </footer>
 </body>
 </html>
