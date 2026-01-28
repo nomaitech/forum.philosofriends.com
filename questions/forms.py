@@ -60,6 +60,6 @@ class AccountDeletionForm(forms.Form):
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if password:
-            if not authenticate(username=self.user.username, password=password):
+            if not self.user.check_password(password):
                 raise ValidationError('Incorrect password. Please try again.')
         return password
