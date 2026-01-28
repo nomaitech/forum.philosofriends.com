@@ -5,14 +5,15 @@ from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Count, Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import CommentForm, QuestionForm, SignupForm
+from .forms import AccountDeletionForm, CommentForm, QuestionForm, SignupForm
 from .models import Comment, Question, Vote
 
 logger = logging.getLogger(__name__)
@@ -224,3 +225,24 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+@login_required
+def account_delete(request):
+    user_to_delete = request.user
+    if request.method == 'POST':
+        form = AccountDeletionForm(user_to_delete, request.POST)
+        if form.is_valid():
+            if form.user != user_to_delete:
+                return redirect('question_list')
+            user_id = user_to_delete.id
+            logout(request)
+            try:
+                user = User.objects.get(id=user_id)
+                user.delete()
+            except User.DoesNotExist:
+                pass
+            return redirect('question_list')
+    else:
+        form = AccountDeletionForm(user_to_delete)
+    return render(request, 'registration/account_delete.html', {'form': form})

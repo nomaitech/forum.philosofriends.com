@@ -10,4 +10,5 @@ urlpatterns = [
     path('questions/<slug:slug>/', views.question_detail_slug, name='question_detail_slug'),
     path('submit/', views.question_create, name='question_create'),
     path('signup/', views.signup, name='signup'),
+    path('account/delete/', views.account_delete, name='account_delete'),
 ]

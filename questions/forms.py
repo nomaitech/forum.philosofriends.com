@@ -1,6 +1,8 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from .models import Comment, Question
 
@@ -37,3 +39,27 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'body': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Add a thoughtful comment'}),
         }
+
+
+class AccountDeletionForm(forms.Form):
+    password = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password to confirm'}),
+        help_text='Enter your password to confirm account deletion.',
+    )
+    confirm = forms.BooleanField(
+        label='I understand this action cannot be undone',
+        required=True,
+        help_text='All your questions, comments, and account data will be permanently deleted.',
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password:
+            if not authenticate(username=self.user.username, password=password):
+                raise ValidationError('Incorrect password. Please try again.')
+        return password
