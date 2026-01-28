@@ -12,6 +12,7 @@ from django.db import IntegrityError
 from django.db.models import Count, Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 
 from .forms import AccountDeletionForm, CommentForm, QuestionForm, SignupForm
 from .models import Comment, Question, Vote
@@ -71,15 +72,31 @@ def question_list(request):
     questions = (
         Question.objects.select_related('author', 'author__profile')
         .prefetch_related('comments')
-        .annotate(score=Count('votes'))
+        .annotate(score=Count('votes'), comments_count=Count('comments'))
     )
-    if sort == 'new':
-        questions = questions.order_by('-pinned', '-created_at', '-score')
-    else:
-        questions = questions.order_by('-pinned', '-score', '-created_at')
     if request.user.is_authenticated:
         questions = questions.annotate(
             has_voted=Exists(Vote.objects.filter(question=OuterRef('pk'), user=request.user))
+        )
+    if sort == 'new':
+        questions = questions.order_by('-pinned', '-created_at', '-score')
+    else:
+        now = timezone.now()
+        gravity = 1.8
+        base_offset = 2.0
+        questions = list(questions)
+        for question in questions:
+            age_hours = max((now - question.created_at).total_seconds() / 3600.0, 0.0)
+            points = question.score or 0
+            comments = question.comments_count or 0
+            question.rank_score = (points + 0.8 * comments) / pow(age_hours + base_offset, gravity)
+        questions.sort(
+            key=lambda item: (
+                0 if item.pinned else 1,
+                -(item.rank_score or 0.0),
+                -(item.score or 0),
+                -item.created_at.timestamp(),
+            )
         )
     return render(request, 'questions/question_list.html', {'questions': questions})
 
