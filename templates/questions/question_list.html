@@ -24,13 +24,6 @@
                         {% if question.link %}
                             <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">
                                 {{ question.title }}
-                                <span class="hn-link-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 16 16" focusable="false">
-                                        <path d="M10.5 2.5h3v3" />
-                                        <path d="M9.2 6.8L13.5 2.5" />
-                                        <path d="M7.5 3.5H3.5v9h9v-4" />
-                                    </svg>
-                                </span>
                             </a>
                         {% else %}
                             <a href="{% url 'question_detail_slug' question.slug %}">{{ question.title }}</a>
