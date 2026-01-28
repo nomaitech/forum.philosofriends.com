@@ -354,3 +354,10 @@ a:hover {
         row-gap: 6px;
     }
 }
+
+@media (min-width: 900px) {
+    body {
+        margin: 0 auto;
+        max-width: 768px;
+    }
+}
