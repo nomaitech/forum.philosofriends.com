@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from urllib.parse import urlparse
 
+from django.contrib.auth.hashers import PBKDF2PasswordHasher
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -156,6 +158,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'questions.validators.ComplexityPasswordValidator',
     },
+]
+
+DEFAULT_PBKDF2_ITERATIONS = PBKDF2PasswordHasher.iterations
+PBKDF2_ITERATIONS = int(os.environ.get('PASSWORD_HASHER_ITERATIONS', DEFAULT_PBKDF2_ITERATIONS))
+
+
+class _ConfigurablePBKDF2Hasher(PBKDF2PasswordHasher):
+    iterations = PBKDF2_ITERATIONS
+
+
+PASSWORD_HASHERS = [
+    'philonet.settings._ConfigurablePBKDF2Hasher',
 ]
 
 
