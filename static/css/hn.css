@@ -15,6 +15,8 @@ body {
     font-family: Verdana, Geneva, sans-serif;
     background: var(--hn-bg);
     color: var(--hn-text);
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 a {
@@ -86,16 +88,21 @@ a:hover {
 
 .hn-main {
     padding: 14px 16px 28px;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .hn-list {
     margin: 0;
     padding-left: 12px;
+    max-width: 100%;
 }
 
 .hn-item {
     margin-bottom: 14px;
     padding-left: 0px;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .hn-item--pinned {
@@ -103,6 +110,8 @@ a:hover {
     border: 1px solid #f1d28a;
     border-radius: 6px;
     padding: 8px;
+    margin-left: -8px;
+    margin-right: -8px;
 }
 
 .hn-pin {
@@ -131,18 +140,28 @@ a:hover {
 .hn-item-header {
     display: flex;
     align-items: flex-start;
-    gap: 0;
+    gap: 6px;
 }
 
 .hn-item-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex: 1;
+    min-width: 0;
 }
 
 .hn-item-title {
     font-size: 14px;
     line-height: 1.2;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+.hn-item-title a {
+    display: inline-block;
+    max-width: 100%;
 }
 
 .hn-item-meta {
@@ -435,6 +454,43 @@ a:hover {
 @media (max-width: 640px) {
     .hn-bar {
         row-gap: 6px;
+    }
+    
+    .hn-main {
+        padding: 14px 12px 28px;
+    }
+    
+    .hn-list {
+        padding-left: 20px;
+    }
+    
+    .hn-item {
+        padding-left: 0;
+    }
+    
+    .hn-item-header {
+        gap: 4px;
+    }
+    
+    .hn-item-title {
+        font-size: 13px;
+    }
+    
+    .hn-item-meta {
+        font-size: 10px;
+        word-break: break-word;
+    }
+    
+    .hn-item--pinned {
+        margin-left: -12px;
+        margin-right: -12px;
+        padding: 10px 12px;
+    }
+    
+    /* Prevent iOS zoom on input focus */
+    .hn-field input,
+    .hn-field textarea {
+        font-size: 16px;
     }
 }
 
