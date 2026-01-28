@@ -28,8 +28,6 @@ env:
       secretKeyRef:
         name: forum-postgres
         key: POSTGRES_PASSWORD
-  - name: PASSWORD_HASHER_ITERATIONS
-    value: "10000"
 
 resources:
   requests:
