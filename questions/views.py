@@ -64,12 +64,16 @@ def fetch_link_title(url):
 
 
 def question_list(request):
+    sort = request.GET.get('sort')
     questions = (
         Question.objects.select_related('author')
         .prefetch_related('comments')
         .annotate(score=Count('votes'))
-        .order_by('-score', '-created_at')
     )
+    if sort == 'new':
+        questions = questions.order_by('-created_at', '-score')
+    else:
+        questions = questions.order_by('-score', '-created_at')
     if request.user.is_authenticated:
         questions = questions.annotate(
             has_voted=Exists(Vote.objects.filter(question=OuterRef('pk'), user=request.user))
