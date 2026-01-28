@@ -1,6 +1,6 @@
 ## Deployment note
 
-Always deploy using the local Helm chart and values file so persistence and uvicorn/asgi are enabled:
+Always deploy using the local Helm chart and values file so persistence, env vars (ALLOWED_HOSTS/CSRF), and uvicorn/asgi are enabled:
 
 1) Build and push the image to `pdr.jonbesga.com`.
 2) Deploy with:
