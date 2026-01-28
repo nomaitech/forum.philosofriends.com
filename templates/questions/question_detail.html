@@ -73,22 +73,24 @@
     <script>
         (() => {
             const toggleButtons = document.querySelectorAll('.hn-reply-toggle');
-            toggleButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    const comment = button.closest('.hn-comment');
-                    if (!comment) return;
-                    const children = comment.querySelector(':scope > .hn-comment-children');
-                    if (!children) return;
-                    const isCollapsed = children.hidden;
-                    children.hidden = !isCollapsed;
-                    button.setAttribute('aria-expanded', String(isCollapsed));
-                    button.textContent = isCollapsed ? '−' : '+';
-                    button.setAttribute(
-                        'aria-label',
-                        isCollapsed ? 'Collapse replies' : 'Expand replies',
-                    );
+                toggleButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const comment = button.closest('.hn-comment');
+                        if (!comment) return;
+                        const children = Array.from(comment.children).find(
+                            (child) => child.classList && child.classList.contains('hn-comment-children'),
+                        );
+                        if (!children) return;
+                        const isCollapsed = children.hidden;
+                        children.hidden = !isCollapsed;
+                        button.setAttribute('aria-expanded', String(isCollapsed));
+                        button.textContent = isCollapsed ? '−' : '+';
+                        button.setAttribute(
+                            'aria-label',
+                            isCollapsed ? 'Collapse replies' : 'Expand replies',
+                        );
+                    });
                 });
-            });
             const replyButtons = document.querySelectorAll('.hn-reply-button');
             if (!replyButtons.length) return;
             const parentInput = document.getElementById('comment-parent-id');
