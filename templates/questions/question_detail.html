@@ -70,39 +70,55 @@
         {% endif %}
     </section>
 
-    {% if user.is_authenticated %}
-        <script>
-            (() => {
-                const replyButtons = document.querySelectorAll('.hn-reply-button');
-                const parentInput = document.getElementById('comment-parent-id');
-                const replyingTo = document.getElementById('replying-to');
-                const replyingName = document.getElementById('replying-to-name');
-                const replyCancel = document.getElementById('reply-cancel');
-                const commentBody = document.getElementById('id_body');
-                const commentForm = document.getElementById('comment-form');
-
-                const clearReply = () => {
-                    if (parentInput) parentInput.value = '';
-                    if (replyingName) replyingName.textContent = '';
-                    if (replyingTo) replyingTo.hidden = true;
-                };
-
-                replyButtons.forEach((button) => {
-                    button.addEventListener('click', () => {
-                        const commentId = button.getAttribute('data-comment-id');
-                        const author = button.getAttribute('data-comment-author');
-                        if (parentInput) parentInput.value = commentId;
-                        if (replyingName) replyingName.textContent = author || 'this comment';
-                        if (replyingTo) replyingTo.hidden = false;
-                        if (commentBody) commentBody.focus();
-                        if (commentForm) commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    });
+    <script>
+        (() => {
+            const toggleButtons = document.querySelectorAll('.hn-reply-toggle');
+            toggleButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const comment = button.closest('.hn-comment');
+                    if (!comment) return;
+                    const children = comment.querySelector(':scope > .hn-comment-children');
+                    if (!children) return;
+                    const isCollapsed = children.hidden;
+                    children.hidden = !isCollapsed;
+                    button.setAttribute('aria-expanded', String(isCollapsed));
+                    button.textContent = isCollapsed ? '−' : '+';
+                    button.setAttribute(
+                        'aria-label',
+                        isCollapsed ? 'Collapse replies' : 'Expand replies',
+                    );
                 });
+            });
+            const replyButtons = document.querySelectorAll('.hn-reply-button');
+            if (!replyButtons.length) return;
+            const parentInput = document.getElementById('comment-parent-id');
+            const replyingTo = document.getElementById('replying-to');
+            const replyingName = document.getElementById('replying-to-name');
+            const replyCancel = document.getElementById('reply-cancel');
+            const commentBody = document.getElementById('id_body');
+            const commentForm = document.getElementById('comment-form');
 
-                if (replyCancel) {
-                    replyCancel.addEventListener('click', clearReply);
-                }
-            })();
-        </script>
-    {% endif %}
+            const clearReply = () => {
+                if (parentInput) parentInput.value = '';
+                if (replyingName) replyingName.textContent = '';
+                if (replyingTo) replyingTo.hidden = true;
+            };
+
+            replyButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const commentId = button.getAttribute('data-comment-id');
+                    const author = button.getAttribute('data-comment-author');
+                    if (parentInput) parentInput.value = commentId;
+                    if (replyingName) replyingName.textContent = author || 'this comment';
+                    if (replyingTo) replyingTo.hidden = false;
+                    if (commentBody) commentBody.focus();
+                    if (commentForm) commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            if (replyCancel) {
+                replyCancel.addEventListener('click', clearReply);
+            }
+        })();
+    </script>
 {% endblock %}
