@@ -29,7 +29,7 @@ env:
         name: forum-postgres
         key: POSTGRES_PASSWORD
   - name: PASSWORD_HASHER_ITERATIONS
-    value: "60000"
+    value: "10000"
 
 resources:
   requests:
