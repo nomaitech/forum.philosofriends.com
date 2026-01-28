@@ -32,6 +32,7 @@ persistence:
   enabled: true
   mountPath: /data
   size: 1Gi
+  existingClaim: forum-web-app-data
 
 nginx:
   enabled: true
