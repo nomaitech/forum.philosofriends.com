@@ -24,7 +24,10 @@ env:
   - name: POSTGRES_USER
     value: philonet
   - name: POSTGRES_PASSWORD
-    value: CHANGEME
+    valueFrom:
+      secretKeyRef:
+        name: forum-postgres
+        key: POSTGRES_PASSWORD
 
 command:
   - /app/entrypoint.sh
