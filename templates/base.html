@@ -51,7 +51,12 @@
     <footer class="hn-footer">
         <div>Philosofriends is a place for short, sincere questions about meaning, mind, and ethics.</div>
         {% if user.is_authenticated %}
-            <div><a href="/account/delete/">delete account</a></div>
+            <div>
+                <form action="/account/delete/" method="post">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete your account?');">delete account</button>
+                </form>
+            </div>
         {% endif %}
     </footer>
 </body>
