@@ -24,7 +24,10 @@
                 {% if user.is_authenticated %}
                     <span class="hn-user">{{ user.username }}</span>
                     <span class="hn-sep">|</span>
-                    <a href="/accounts/logout/">logout</a>
+                    <form class="hn-logout-form" method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="hn-link-button" type="submit">logout</button>
+                    </form>
                 {% else %}
                     <a href="/accounts/login/">login</a>
                     <span class="hn-sep">|</span>
