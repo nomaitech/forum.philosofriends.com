@@ -1,9 +1,9 @@
 <li class="hn-comment">
     <div class="hn-comment-meta">
+        <span class="hn-comment-meta-text">{{ comment.author.username }} · {{ comment.created_at|date:"M j, Y" }}</span>
         {% if comment.children %}
             <button class="hn-reply-toggle" type="button" aria-expanded="true" aria-label="Collapse replies">−</button>
         {% endif %}
-        {{ comment.author.username }} · {{ comment.created_at|date:"M j, Y" }}
     </div>
     <div class="hn-comment-body">{{ comment.body|linebreaksbr }}</div>
     {% if user.is_authenticated %}

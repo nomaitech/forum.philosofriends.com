@@ -228,6 +228,10 @@ a:hover {
     font-size: 11px;
     color: var(--hn-muted);
     margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .hn-comment-body {
@@ -247,7 +251,6 @@ a:hover {
 }
 
 .hn-comment-children .hn-comment-meta {
-    display: flex;
     align-items: center;
     gap: 6px;
 }
@@ -270,17 +273,17 @@ a:hover {
 }
 
 .hn-reply-toggle {
-    background: #e3edf6;
+    background: none;
     border: none;
     color: var(--hn-muted);
-    width: 16px;
-    height: 16px;
-    border-radius: 999px;
-    display: inline-grid;
-    place-items: center;
+    padding: 0;
     font-size: 12px;
     line-height: 1;
     cursor: pointer;
+}
+
+.hn-reply-toggle:hover {
+    color: var(--hn-orange);
 }
 
 .hn-reply-button:hover,
