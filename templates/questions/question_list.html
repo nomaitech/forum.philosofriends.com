@@ -45,7 +45,7 @@
                             {% if question.link %}
                                 · <a href="{{ question.link }}" rel="noopener noreferrer" target="_blank">source</a>
                             {% endif %}
-                            {% if user.is_authenticated and user.username == 'jon' %}
+                            {% if user.is_authenticated and user.is_superuser %}
                                 ·
                                 <form class="hn-pin-form" method="post" action="{% url 'question_pin_toggle' question.pk %}">
                                     {% csrf_token %}
