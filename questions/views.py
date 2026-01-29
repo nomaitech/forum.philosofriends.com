@@ -74,8 +74,10 @@ def _format_question_date(created_at, now):
         total_minutes = int(delta_seconds // 60)
         hours, minutes = divmod(total_minutes, 60)
         if hours:
-            return f"{hours}h {minutes}m ago"
-        return f"{minutes}m ago"
+            unit = "hour" if hours == 1 else "hours"
+            return f"{hours} {unit} ago"
+        unit = "minute" if minutes == 1 else "minutes"
+        return f"{minutes} {unit} ago"
     return date_format(timezone.localtime(created_at), "M j, Y")
 
 
