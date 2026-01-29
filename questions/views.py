@@ -13,6 +13,7 @@ from django.db.models import Count, Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.formats import date_format
 
 from .forms import AccountDeletionForm, CommentForm, QuestionForm, SignupForm
 from .models import Comment, Question, Vote
@@ -67,8 +68,20 @@ def fetch_link_title(url):
 
 
 
+def _format_question_date(created_at, now):
+    delta_seconds = max((now - created_at).total_seconds(), 0.0)
+    if delta_seconds < 86400:
+        total_minutes = int(delta_seconds // 60)
+        hours, minutes = divmod(total_minutes, 60)
+        if hours:
+            return f"{hours}h {minutes}m ago"
+        return f"{minutes}m ago"
+    return date_format(timezone.localtime(created_at), "M j, Y")
+
+
 def question_list(request):
     sort = request.GET.get('sort')
+    now = timezone.now()
     questions = (
         Question.objects.select_related('author', 'author__profile')
         .prefetch_related('comments')
@@ -81,7 +94,6 @@ def question_list(request):
     if sort == 'new':
         questions = questions.order_by('-pinned', '-created_at', '-score')
     else:
-        now = timezone.now()
         gravity = 1.8
         base_offset = 2.0
         questions = list(questions)
@@ -98,6 +110,9 @@ def question_list(request):
                 -item.created_at.timestamp(),
             )
         )
+    questions = list(questions)
+    for question in questions:
+        question.display_date = _format_question_date(question.created_at, now)
     return render(request, 'questions/question_list.html', {'questions': questions})
 
 

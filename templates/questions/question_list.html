@@ -44,7 +44,7 @@
                             {% else %}
                                 <a href="{% url 'profile_detail' question.author.username %}">{{ question.author.username }}</a>
                             {% endif %}
-                            · {{ question.created_at|date:"M j, Y" }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
+                            · {{ question.display_date }} · <a href="{% url 'question_detail_slug' question.slug %}">{{ question.comments.count }} comments</a>
                             {% if question.pinned %}
                                 · <span class="hn-pin">pinned</span>
                             {% endif %}
