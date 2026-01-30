@@ -362,6 +362,10 @@ a:hover {
     margin-bottom: 8px;
 }
 
+.hn-replying[hidden] {
+    display: none;
+}
+
 .hn-muted {
     color: var(--hn-muted);
 }
