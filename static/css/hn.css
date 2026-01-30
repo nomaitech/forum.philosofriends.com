@@ -500,3 +500,59 @@ a:hover {
         max-width: 900px;
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --hn-orange: #3aa6b9;
+        --hn-bg: #0f141a;
+        --hn-text: #e3edf5;
+        --hn-muted: #9fb1c4;
+        --hn-border: #24313a;
+    }
+
+    .hn-header {
+        background: #1a4b59;
+    }
+
+    .hn-logo {
+        border-color: rgba(255, 255, 255, 0.85);
+        color: #fff;
+    }
+
+    .hn-sep {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .hn-item--pinned {
+        background: #2b2415;
+        border-color: #5a4520;
+    }
+
+    .hn-pin {
+        color: #f0c773;
+    }
+
+    .hn-vote-button,
+    .hn-vote-placeholder {
+        color: #8ba2b6;
+    }
+
+    .hn-comment-children .hn-comment {
+        background: #151d24;
+    }
+
+    .hn-reply-toggle {
+        background: #18222b;
+    }
+
+    .hn-field input,
+    .hn-field textarea {
+        background: #0f161d;
+        color: var(--hn-text);
+        border-color: var(--hn-border);
+    }
+
+    .hn-error {
+        color: #ff9a93;
+    }
+}
