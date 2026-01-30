@@ -46,7 +46,36 @@
             {% if user.is_authenticated %}
             · <a href="{% url 'account_delete' %}">Delete account</a>
             {% endif %}
+            · <button class="hn-footer-toggle" type="button" id="theme-toggle">dark mode</button>
         </div>
     </footer>
+    <script>
+        (() => {
+            const root = document.documentElement;
+            const toggle = document.getElementById('theme-toggle');
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+            }
+            const syncLabel = () => {
+                const isDark = root.getAttribute('data-theme') === 'dark';
+                if (toggle) toggle.textContent = isDark ? 'light mode' : 'dark mode';
+            };
+            syncLabel();
+            if (toggle) {
+                toggle.addEventListener('click', () => {
+                    const isDark = root.getAttribute('data-theme') === 'dark';
+                    if (isDark) {
+                        root.removeAttribute('data-theme');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        root.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                    syncLabel();
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

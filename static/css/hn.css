@@ -507,58 +507,70 @@ a:hover {
     }
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --hn-orange: #3aa6b9;
-        --hn-bg: #0f141a;
-        --hn-text: #e3edf5;
-        --hn-muted: #9fb1c4;
-        --hn-border: #24313a;
-    }
+[data-theme="dark"] {
+    --hn-orange: #3aa6b9;
+    --hn-bg: #0f141a;
+    --hn-text: #e3edf5;
+    --hn-muted: #9fb1c4;
+    --hn-border: #24313a;
+}
 
-    .hn-header {
-        background: #1a4b59;
-    }
+[data-theme="dark"] .hn-header {
+    background: #1a4b59;
+}
 
-    .hn-logo {
-        border-color: rgba(255, 255, 255, 0.85);
-        color: #fff;
-    }
+[data-theme="dark"] .hn-logo {
+    border-color: rgba(255, 255, 255, 0.85);
+    color: #fff;
+}
 
-    .hn-sep {
-        color: rgba(255, 255, 255, 0.7);
-    }
+[data-theme="dark"] .hn-sep {
+    color: rgba(255, 255, 255, 0.7);
+}
 
-    .hn-item--pinned {
-        background: #2b2415;
-        border-color: #5a4520;
-    }
+[data-theme="dark"] .hn-item--pinned {
+    background: #2b2415;
+    border-color: #5a4520;
+}
 
-    .hn-pin {
-        color: #f0c773;
-    }
+[data-theme="dark"] .hn-pin {
+    color: #f0c773;
+}
 
-    .hn-vote-button,
-    .hn-vote-placeholder {
-        color: #8ba2b6;
-    }
+[data-theme="dark"] .hn-vote-button,
+[data-theme="dark"] .hn-vote-placeholder {
+    color: #8ba2b6;
+}
 
-    .hn-comment-children .hn-comment {
-        background: #151d24;
-    }
+[data-theme="dark"] .hn-comment-children .hn-comment {
+    background: #151d24;
+}
 
-    .hn-reply-toggle {
-        background: #18222b;
-    }
+[data-theme="dark"] .hn-reply-toggle {
+    background: #18222b;
+}
 
-    .hn-field input,
-    .hn-field textarea {
-        background: #0f161d;
-        color: var(--hn-text);
-        border-color: var(--hn-border);
-    }
+[data-theme="dark"] .hn-field input,
+[data-theme="dark"] .hn-field textarea {
+    background: #0f161d;
+    color: var(--hn-text);
+    border-color: var(--hn-border);
+}
 
-    .hn-error {
-        color: #ff9a93;
-    }
+[data-theme="dark"] .hn-error {
+    color: #ff9a93;
+}
+
+.hn-footer-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 11px;
+    color: inherit;
+    cursor: pointer;
+}
+
+.hn-footer-toggle:hover {
+    color: var(--hn-orange);
+    text-decoration: underline;
 }
