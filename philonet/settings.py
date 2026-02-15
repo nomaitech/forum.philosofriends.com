@@ -34,10 +34,17 @@ def _env_flag(value, default=False):
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _env_flag(os.environ.get('DEBUG'), default=True)
 
-default_allowed_hosts = ['witham.nomai.internal', '127.0.0.1', 'localhost', '100.64.0.5']
+default_allowed_hosts = [
+    'forum.philosofriends.com',
+    'witham.nomai.internal',
+    '127.0.0.1',
+    'localhost',
+    '100.64.0.5',
+]
 env_allowed_hosts = os.environ.get('ALLOWED_HOSTS')
 if env_allowed_hosts:
-    ALLOWED_HOSTS = [host.strip() for host in env_allowed_hosts.split(',') if host.strip()]
+    env_hosts = [host.strip() for host in env_allowed_hosts.split(',') if host.strip()]
+    ALLOWED_HOSTS = list(dict.fromkeys(env_hosts + default_allowed_hosts))
 else:
     ALLOWED_HOSTS = default_allowed_hosts
 
