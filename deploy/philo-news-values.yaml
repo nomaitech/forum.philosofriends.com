@@ -12,6 +12,11 @@ service:
 env:
   - name: DEBUG
     value: "false"
+  - name: SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: forum-django
+        key: SECRET_KEY
   - name: ALLOWED_HOSTS
     value: forum.philosofriends.com
   - name: CSRF_TRUSTED_ORIGINS
