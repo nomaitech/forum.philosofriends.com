@@ -2,6 +2,7 @@ replicaCount: 1
 
 image:
   name: ""
+  pullPolicy: Always
 
 containerPort: 8000
 
@@ -28,6 +29,17 @@ env:
       secretKeyRef:
         name: forum-postgres
         key: POSTGRES_PASSWORD
+  - name: SITE_URL
+    value: https://forum.philosofriends.com
+  - name: EMAIL_NOTIFICATIONS_ENABLED
+    value: "true"
+  - name: SMTP2GO_FROM_EMAIL
+    value: noreply@philosofriends.com
+  - name: SMTP2GO_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: forum-smtp2go
+        key: SMTP2GO_API_KEY
 
 resources:
   requests:

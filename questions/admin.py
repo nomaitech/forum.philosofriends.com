@@ -20,6 +20,17 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'is_vip')
+    list_display = (
+        'user',
+        'is_vip',
+        'notify_new_posts',
+        'notify_replies_to_comments',
+        'notify_replies_to_posts',
+    )
     search_fields = ('user__username', 'user__email')
-    list_filter = ('is_vip',)
+    list_filter = (
+        'is_vip',
+        'notify_new_posts',
+        'notify_replies_to_comments',
+        'notify_replies_to_posts',
+    )

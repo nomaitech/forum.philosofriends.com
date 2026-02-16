@@ -92,6 +92,32 @@ a:hover {
     overflow-x: hidden;
 }
 
+.hn-impersonation-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    background: #fff4d7;
+    border-bottom: 1px solid #f0cf7d;
+    color: #604200;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+
+.hn-impersonation-banner form {
+    display: inline;
+}
+
+.hn-impersonation-banner button {
+    border: none;
+    background: transparent;
+    color: #604200;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: 12px;
+}
+
 .hn-list {
     margin: 0;
     padding-left: 12px;
@@ -372,6 +398,46 @@ a:hover {
 
 .hn-form {
     max-width: 520px;
+}
+
+.hn-profile-settings {
+    margin-top: 14px;
+}
+
+.hn-profile-settings h2 {
+    font-size: 14px;
+    margin: 0 0 10px;
+}
+
+.hn-profile-settings .hn-field label {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.hn-profile-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hn-inline-admin-form {
+    display: inline;
+}
+
+.hn-admin-post-as {
+    background: none;
+    border: none;
+    color: #c00;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0;
+    cursor: pointer;
+}
+
+.hn-admin-post-as:hover {
+    text-decoration: underline;
 }
 
 .hn-form h1 {

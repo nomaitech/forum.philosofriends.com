@@ -4,14 +4,54 @@
 
 {% block content %}
     <section class="hn-profile">
-        <h1>
+        <h1 class="hn-profile-title">
             {% if profile_user.profile.is_vip %}
                 <span class="hn-user--vip">{{ profile_user.username }}</span>
             {% else %}
                 {{ profile_user.username }}
             {% endif %}
+            {% if user.is_authenticated and user.is_superuser %}
+                {% if not impersonation_user or impersonation_user.id != profile_user.id %}
+                    <form method="post" action="{% url 'impersonate_start' %}" class="hn-inline-admin-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ profile_user.id }}">
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button class="hn-admin-post-as" type="submit">post as {{ profile_user.username }}</button>
+                    </form>
+                {% endif %}
+            {% endif %}
         </h1>
         <p class="hn-muted">Posts by {{ profile_user.username }}</p>
+        {% if is_own_profile %}
+            <section class="hn-profile-settings">
+                <h2>Profile settings</h2>
+                <form method="post" class="hn-form">
+                    {% csrf_token %}
+                    <div class="hn-field">
+                        <label for="{{ settings_form.email.id_for_label }}">Email</label>
+                        {{ settings_form.email }}
+                        {% if settings_form.email.errors %}
+                            <div class="hn-error">{{ settings_form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="hn-field">
+                        <span>Email notifications</span>
+                        <label>{{ settings_form.notify_new_posts }} New posts</label>
+                        <label>{{ settings_form.notify_replies_to_comments }} New replies to your comments</label>
+                        <label>{{ settings_form.notify_replies_to_posts }} New replies to your posts</label>
+                    </div>
+                    <button class="hn-button" type="submit">Save settings</button>
+                </form>
+            </section>
+        {% endif %}
+        {% if user.is_authenticated and user.is_superuser and impersonation_user and impersonation_user.id == profile_user.id %}
+            <p class="hn-muted">Currently posting as this user.</p>
+            <form method="post" action="{% url 'impersonate_stop' %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="hn-button" type="submit">Stop impersonating</button>
+            </form>
+        {% endif %}
     </section>
 
     {% if questions %}

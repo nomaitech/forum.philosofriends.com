@@ -15,10 +15,11 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.formats import date_format
 
-from .forms import AccountDeletionForm, CommentForm, QuestionForm, SignupForm
+from .forms import AccountDeletionForm, CommentForm, ProfileSettingsForm, QuestionForm, SignupForm
 from .models import Comment, Question, Vote
 
 logger = logging.getLogger(__name__)
+IMPERSONATION_USER_ID_SESSION_KEY = 'admin_impersonation_user_id'
 
 
 class _TitleParser(HTMLParser):
@@ -64,6 +65,23 @@ def fetch_link_title(url):
             return title.strip()[:180] or url
     except (URLError, TimeoutError, socket.timeout, ValueError):
         return url
+
+
+def get_impersonated_user(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return None
+    user_id = request.session.get(IMPERSONATION_USER_ID_SESSION_KEY)
+    if not user_id:
+        return None
+    try:
+        return User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        request.session.pop(IMPERSONATION_USER_ID_SESSION_KEY, None)
+        return None
+
+
+def get_posting_user(request):
+    return get_impersonated_user(request) or request.user
 
 
 
@@ -125,6 +143,19 @@ def profile_detail(request, username):
         User.objects.select_related('profile'),
         username=username,
     )
+    is_own_profile = request.user.is_authenticated and request.user == profile_user
+    if request.method == 'POST':
+        if not is_own_profile:
+            return redirect('profile_detail', username=profile_user.username)
+        settings_form = ProfileSettingsForm(profile_user, profile_user.profile, request.POST)
+        if settings_form.is_valid():
+            settings_form.save()
+            return redirect('profile_detail', username=profile_user.username)
+    elif is_own_profile:
+        settings_form = ProfileSettingsForm(profile_user, profile_user.profile)
+    else:
+        settings_form = None
+
     questions = (
         Question.objects.filter(author=profile_user)
         .select_related('author', 'author__profile')
@@ -137,6 +168,8 @@ def profile_detail(request, username):
         {
             'profile_user': profile_user,
             'questions': questions,
+            'is_own_profile': is_own_profile,
+            'settings_form': settings_form,
         },
     )
 
@@ -170,7 +203,7 @@ def question_detail(request, pk):
         if form.is_valid():
             Comment.objects.create(
                 question=question,
-                author=request.user,
+                author=get_posting_user(request),
                 body=form.cleaned_data['body'],
                 parent=reply_parent,
             )
@@ -278,7 +311,7 @@ def question_create(request):
             form.fields['body'].required = False
         if form.is_valid():
             question = form.save(commit=False)
-            question.author = request.user
+            question.author = get_posting_user(request)
             if post_type == 'link':
                 link = (form.cleaned_data.get('link') or '').strip()
                 if not link:
@@ -321,6 +354,7 @@ def signup(request):
 
 
 def logout_view(request):
+    request.session.pop(IMPERSONATION_USER_ID_SESSION_KEY, None)
     logout(request)
     return redirect('question_list')
 
@@ -337,3 +371,25 @@ def account_delete(request):
     else:
         form = AccountDeletionForm(user_to_delete)
     return render(request, 'registration/account_delete.html', {'form': form})
+
+
+@login_required
+def impersonate_start(request):
+    if request.method != 'POST' or not request.user.is_superuser:
+        return redirect('question_list')
+    user_id = request.POST.get('user_id')
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or reverse('question_list')
+    target_user = User.objects.filter(pk=user_id).first()
+    if not target_user:
+        return redirect(next_url)
+    request.session[IMPERSONATION_USER_ID_SESSION_KEY] = target_user.pk
+    return redirect(next_url)
+
+
+@login_required
+def impersonate_stop(request):
+    if request.method != 'POST' or not request.user.is_superuser:
+        return redirect('question_list')
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or reverse('question_list')
+    request.session.pop(IMPERSONATION_USER_ID_SESSION_KEY, None)
+    return redirect(next_url)

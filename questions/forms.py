@@ -63,3 +63,39 @@ class AccountDeletionForm(forms.Form):
             if not self.user.check_password(password):
                 raise ValidationError('Incorrect password. Please try again.')
         return password
+
+
+class ProfileSettingsForm(forms.Form):
+    email = forms.EmailField(
+        required=False,
+        label='Email',
+        widget=forms.EmailInput(attrs={'placeholder': 'you@example.com'}),
+    )
+    notify_new_posts = forms.BooleanField(required=False, label='New posts')
+    notify_replies_to_comments = forms.BooleanField(required=False, label='New replies to your comments')
+    notify_replies_to_posts = forms.BooleanField(required=False, label='New replies to your posts')
+
+    def __init__(self, user, profile, *args, **kwargs):
+        self.user = user
+        self.profile = profile
+        initial = kwargs.get('initial') or {}
+        kwargs['initial'] = initial
+        initial.setdefault('email', user.email)
+        initial.setdefault('notify_new_posts', profile.notify_new_posts)
+        initial.setdefault('notify_replies_to_comments', profile.notify_replies_to_comments)
+        initial.setdefault('notify_replies_to_posts', profile.notify_replies_to_posts)
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        self.user.email = self.cleaned_data['email']
+        self.user.save(update_fields=['email'])
+        self.profile.notify_new_posts = self.cleaned_data['notify_new_posts']
+        self.profile.notify_replies_to_comments = self.cleaned_data['notify_replies_to_comments']
+        self.profile.notify_replies_to_posts = self.cleaned_data['notify_replies_to_posts']
+        self.profile.save(
+            update_fields=[
+                'notify_new_posts',
+                'notify_replies_to_comments',
+                'notify_replies_to_posts',
+            ]
+        )

@@ -23,7 +23,11 @@
             <div class="hn-spacer"></div>
             <nav class="hn-nav hn-nav-right">
                 {% if user.is_authenticated %}
-                    <span class="hn-user">{{ user.username }}</span>
+                    <a class="hn-user" href="{% url 'profile_detail' user.username %}">{{ user.username }}</a>
+                    {% if impersonation_user %}
+                        <span class="hn-sep">|</span>
+                        <span>posting as {{ impersonation_user.username }}</span>
+                    {% endif %}
                     <span class="hn-sep">|</span>
                     <a href="/accounts/logout/">logout</a>
                 {% else %}
@@ -34,6 +38,16 @@
             </nav>
         </div>
     </header>
+    {% if impersonation_user %}
+        <div class="hn-impersonation-banner">
+            You are posting as <strong>{{ impersonation_user.username }}</strong>.
+            <form method="post" action="{% url 'impersonate_stop' %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button type="submit">Stop impersonating</button>
+            </form>
+        </div>
+    {% endif %}
 
     <main class="hn-main">
         {% block content %}{% endblock %}

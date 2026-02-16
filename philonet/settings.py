@@ -88,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'questions.context_processors.impersonation',
             ],
         },
     },
@@ -204,6 +205,12 @@ WHITENOISE_USE_FINDERS = True
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'question_list'
 LOGOUT_REDIRECT_URL = 'question_list'
+
+SITE_URL = os.environ.get('SITE_URL', 'https://forum.philosofriends.com')
+EMAIL_NOTIFICATIONS_ENABLED = _env_flag(os.environ.get('EMAIL_NOTIFICATIONS_ENABLED'), default=False)
+SMTP2GO_API_URL = os.environ.get('SMTP2GO_API_URL', 'https://api.smtp2go.com/v3/email/send')
+SMTP2GO_API_KEY = os.environ.get('SMTP2GO_API_KEY', '')
+SMTP2GO_FROM_EMAIL = os.environ.get('SMTP2GO_FROM_EMAIL', 'noreply@philosofriends.com')
 
 LOGGING = {
     'version': 1,

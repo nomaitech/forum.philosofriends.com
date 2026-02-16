@@ -56,6 +56,9 @@ class Comment(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     is_vip = models.BooleanField(default=False, db_index=True)
+    notify_new_posts = models.BooleanField(default=False)
+    notify_replies_to_comments = models.BooleanField(default=False)
+    notify_replies_to_posts = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user.username} profile'
@@ -65,3 +68,21 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=Question)
+def send_new_post_notifications(sender, instance, created, **kwargs):
+    if not created:
+        return
+    from .notifications import notify_new_question
+
+    notify_new_question(instance)
+
+
+@receiver(post_save, sender=Comment)
+def send_reply_notifications(sender, instance, created, **kwargs):
+    if not created:
+        return
+    from .notifications import notify_new_comment
+
+    notify_new_comment(instance)
