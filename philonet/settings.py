@@ -23,9 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hin0mr+7o1^5+d7ay+hk4&e8_gpm+s@@=g+i@6ceig1q_hc8*2'
-
 def _env_flag(value, default=False):
     if value is None:
         return default
@@ -33,6 +30,14 @@ def _env_flag(value, default=False):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _env_flag(os.environ.get('DEBUG'), default=True)
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'dev-insecure-change-me'
+    else:
+        raise ValueError("SECRET_KEY environment variable is required when DEBUG is false.")
 
 default_allowed_hosts = [
     'forum.philosofriends.com',

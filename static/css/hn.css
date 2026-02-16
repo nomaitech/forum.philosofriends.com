@@ -73,6 +73,24 @@ a:hover {
     gap: 6px;
 }
 
+.hn-nav-inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.hn-link-button {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.hn-link-button:hover {
+    text-decoration: underline;
+}
+
 .hn-sep {
     color: #fff;
 }

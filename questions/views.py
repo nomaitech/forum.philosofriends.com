@@ -353,12 +353,6 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
-def logout_view(request):
-    request.session.pop(IMPERSONATION_USER_ID_SESSION_KEY, None)
-    logout(request)
-    return redirect('question_list')
-
-
 @login_required
 def account_delete(request):
     user_to_delete = request.user

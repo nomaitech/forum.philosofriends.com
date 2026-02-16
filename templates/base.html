@@ -29,7 +29,10 @@
                         <span>posting as {{ impersonation_user.username }}</span>
                     {% endif %}
                     <span class="hn-sep">|</span>
-                    <a href="/accounts/logout/">logout</a>
+                    <form method="post" action="{% url 'logout' %}" class="hn-nav-inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="hn-link-button">logout</button>
+                    </form>
                 {% else %}
                     <a href="/accounts/login/">login</a>
                     <span class="hn-sep">|</span>
